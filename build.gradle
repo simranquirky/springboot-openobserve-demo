@@ -1,0 +1,70 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.4.5'
+	id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+ext {
+    // Define a consistent OpenTelemetry version
+    openTelemetryVersion = '1.32.0'
+}
+
+// dependencies {
+//     implementation 'org.springframework.boot:spring-boot-starter-web'
+    
+//     // OpenTelemetry dependencies - all pinned to same version
+//     implementation "io.opentelemetry:opentelemetry-api:${openTelemetryVersion}"
+//     implementation "io.opentelemetry:opentelemetry-sdk:${openTelemetryVersion}"
+//     implementation "io.opentelemetry:opentelemetry-exporter-otlp:${openTelemetryVersion}"
+//     implementation "io.opentelemetry:opentelemetry-semconv:${openTelemetryVersion}-alpha"
+//     implementation "io.opentelemetry:opentelemetry-sdk-extension-autoconfigure:${openTelemetryVersion}"
+    
+//     // Use the Spring Boot auto-instrumentation
+//     implementation 'io.micrometer:micrometer-tracing-bridge-otel:1.2.0'
+//     implementation 'io.opentelemetry:opentelemetry-exporter-otlp-common:1.32.0'
+    
+//     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+// }
+
+dependencies {
+    // Core Spring Boot
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    
+    // Spring Boot Actuator for metrics
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    
+    // OpenTelemetry integration via Spring Boot
+    implementation 'io.micrometer:micrometer-tracing-bridge-otel:1.2.0'
+    implementation 'io.opentelemetry:opentelemetry-exporter-otlp:1.31.0'
+    implementation 'io.opentelemetry.instrumentation:opentelemetry-instrumentation-annotations:2.15.0'
+	runtimeOnly("io.opentelemetry.instrumentation:opentelemetry-logback-appender-1.0:2.15.0-alpha")
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+
+bootRun {
+    jvmArgs = [
+        "-javaagent:/opt/otel/opentelemetry-javaagent-2.15.0.jar", // Use your java-agent Jar file path
+        "-Dotel.exporter=otlp",
+        "-Dotel.otlp.endpoint=http://localhost:4317",  // Use your OTLP endpoint
+        "-Dotel.service.name=demo",
+        "-Dotel.metrics.exporter=otlp"
+    ]
+}
