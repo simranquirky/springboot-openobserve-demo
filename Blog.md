@@ -155,7 +155,7 @@ You should see logs indicating it’s listening on:
 With the OpenTelemetry Collector running locally, the next step is to configure your Spring Boot application to emit logs and traces — both of which will be routed to OpenObserve via the Collector.
 
 The project you're working with already includes all the necessary components, and it will be available on GitHub here:  
-👉 [GitHub Repository: Monitoring Spring Boot with OpenObserve](<insert-your-repo-link-here>)
+👉 [GitHub Repository: Monitoring Spring Boot with OpenObserve](https://github.com/simranquirky/springboot-openobserve-demo)
 
 ## 🧩 About the Application
 
